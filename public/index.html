@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Panduan Pengislaman Mualaf - HCF Johor</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          display: ['"Amiri"', 'serif'],
+        },
+        colors: {
+          hcf: {
+            ink: '#1b2b22', cream: '#fbf7ee', deep: '#0c3b2d',
+            mid: '#166a4c', gold: '#c79a3d', goldsoft: '#e9c873'
+          }
+        }
+      }
+    }
+  }
+</script>
+<style>
+  html,body{background:#fbf7ee;font-family:'Plus Jakarta Sans',sans-serif;color:#1b2b22}
+  #app-shell{max-width:480px;margin:0 auto;min-height:100vh;background:#fbf7ee;position:relative;box-shadow:0 0 60px rgba(12,59,45,.12)}
+  @media(min-width:481px){body{padding:24px 0}#app-shell{border-radius:28px;overflow:hidden;min-height:calc(100vh - 48px)}}
+  .tab-panel{display:none}.tab-panel.active{display:block;animation:fadeIn .25s ease}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+  .nav-btn{color:#cfe3da}.nav-btn.active{color:#e9c873}.nav-btn.active .nav-dot{opacity:1;transform:scale(1)}
+  .nav-dot{opacity:0;transform:scale(0);transition:all .2s ease}
+  .accordion-body{max-height:0;overflow:hidden;transition:max-height .35s ease}
+  .accordion-item.open .accordion-body{max-height:2000px}.accordion-item.open .chevron{transform:rotate(180deg)}
+  .chevron{transition:transform .25s ease}
+  .edit-block{border-radius:4px}
+  body.admin-mode .edit-block{outline:1.5px dashed rgba(199,154,61,.55);outline-offset:3px;cursor:text}
+  body.admin-mode .edit-block:focus{outline:2px solid #c79a3d;background:#fff8e6}
+  .admin-only{display:none}body.admin-mode .admin-only{display:block}
+  .non-admin-only{display:block}body.admin-mode .non-admin-only{display:none}
+  .remove-item-btn,.add-item-btn{display:none}
+  body.admin-mode .remove-item-btn,body.admin-mode .add-item-btn{display:inline-flex}
+  #admin-toolbar{display:none}body.admin-mode #admin-toolbar{display:flex}
+  body.admin-mode #admin-hint{display:block}#admin-hint{display:none}
+  #logo-upload-label{display:none}body.admin-mode #logo-upload-label{display:flex}
+  ::-webkit-scrollbar{width:8px}::-webkit-scrollbar-thumb{background:#166a4c;border-radius:4px}
+</style>
+</head>
+<body class="text-hcf-ink">
+<div id="app-shell">
+
+<!-- APP BAR -->
+<header class="bg-hcf-deep text-white px-4 pt-4 pb-3 sticky top-0 z-40 flex items-center justify-between gap-3 border-b-2 border-hcf-gold">
+  <div class="flex items-center gap-2.5 min-w-0">
+    <div id="logo-wrap" class="h-11 w-11 rounded-xl bg-white flex items-center justify-center shrink-0 shadow-md p-1 relative overflow-hidden">
+      <img id="logo-img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 44 44'%3E%3Crect width='44' height='44' rx='6' fill='%230c3b2d'/%3E%3Ctext x='22' y='17' text-anchor='middle' fill='%23e9c873' font-size='7' font-family='serif' font-weight='bold'%3EHIDAYAH%3C/text%3E%3Ctext x='22' y='27' text-anchor='middle' fill='%23e9c873' font-size='7' font-family='serif' font-weight='bold'%3ECENTRE%3C/text%3E%3Ctext x='22' y='37' text-anchor='middle' fill='%23c79a3d' font-size='6' font-family='serif'%3EJOHOR%3C/text%3E%3C/svg%3E" alt="Logo HCF Johor" class="h-full w-full object-contain">
+      <label id="logo-upload-label" class="absolute inset-0 bg-black/60 cursor-pointer items-center justify-center text-[8px] text-white font-bold text-center leading-tight flex-col gap-0.5">
+        <span>📷</span><span>Tukar</span>
+        <input id="logo-upload-input" type="file" accept="image/*" class="hidden">
+      </label>
+    </div>
+    <div class="min-w-0">
+      <h1 class="font-display font-bold tracking-wide text-[13px] leading-tight text-hcf-goldsoft truncate">HIDAYAH CENTRE FOUNDATION JOHOR</h1>
+      <p class="text-[10px] text-emerald-100/80 truncate">Panduan Pengurusan Pendaftaran Pengislaman</p>
+    </div>
+  </div>
+  <button id="admin-lock-btn" title="Mod Admin" class="shrink-0 h-9 w-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition">
+    <svg id="lock-icon-closed" xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5 text-hcf-goldsoft" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>
+    <svg id="lock-icon-open" xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5 text-hcf-goldsoft hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 017.8-1.2"/></svg>
+  </button>
+</header>
+
+<!-- ADMIN HINT -->
+<div id="admin-hint" class="bg-hcf-goldsoft/30 text-hcf-deep text-[11px] px-4 py-2 border-b border-hcf-gold/40">
+  Mod Admin aktif — tekan teks bergaris putus untuk edit. Tekan <strong>💾 Simpan</strong> atau <strong>⬇ Muat Turun</strong> selepas siap.
+</div>
+
+<!-- WATERMARK -->
+<svg class="fixed inset-0 w-full h-full pointer-events-none opacity-[0.05] -z-10" xmlns="http://www.w3.org/2000/svg">
+  <defs><pattern id="iStar" width="56" height="56" patternUnits="userSpaceOnUse"><polygon points="28,3 53,28 28,53 3,28" fill="none" stroke="#0c3b2d" stroke-width="1"/><rect x="11" y="11" width="34" height="34" fill="none" stroke="#0c3b2d" stroke-width="1"/></pattern></defs>
+  <rect width="100%" height="100%" fill="url(#iStar)"/>
+</svg>
+
+<!-- MAIN CONTENT -->
+<main id="app-content" class="px-4 pt-5 pb-28">
+
+<!-- ===== TAB: INFO ===== -->
+<section class="tab-panel active" data-panel="info">
+  <div class="relative mb-6">
+    <div class="h-16 bg-hcf-deep rounded-t-full border-4 border-b-0 border-hcf-gold flex items-end justify-center pb-2">
+      <span class="text-hcf-goldsoft text-[10px] font-display tracking-[0.2em] uppercase">Assalamualaikum</span>
+    </div>
+    <div class="bg-white border-4 border-t-0 border-hcf-gold rounded-b-2xl px-5 py-5 text-center -mt-px">
+      <h2 class="font-display text-xl font-bold text-hcf-deep">Panduan Pendaftaran Pengislaman</h2>
+      <p class="text-xs text-slate-500 mt-1">Panduan rasmi Hidayah Centre Foundation Johor untuk bakal mualaf, Rakan Hidayah dan pegawai.</p>
+    </div>
+  </div>
+  <h3 class="font-display text-lg font-bold text-hcf-deep mb-2">1.1 Latar Belakang</h3>
+  <div class="bg-white rounded-xl border border-hcf-gold/30 p-4 mb-6 space-y-3 shadow-sm">
+    <p class="edit-block text-sm leading-relaxed text-slate-700" data-key="latar1">Hidayah Centre (HC) telah ditubuhkan pada tahun 2005 sebagai satu institusi yang berkhidmat untuk menghubungkan komuniti daripada pelbagai etnik dan agama di Malaysia.</p>
+    <p class="edit-block text-sm leading-relaxed text-slate-700" data-key="latar2">Pada 29 Februari 2012, Hidayah Centre Foundation telah diperbadankan secara rasmi di bawah Bahagian Hal Ehwal Undang-Undang (BHEUU), Jabatan Perdana Menteri dengan nombor pendaftaran PPAB-14/2012.</p>
+  </div>
+  <h3 class="font-display text-lg font-bold text-hcf-deep mb-2">1.2 Objektif</h3>
+  <div class="bg-hcf-mid/5 rounded-xl border border-hcf-mid/20 p-4 mb-4">
+    <p class="edit-block text-xs font-bold text-hcf-mid uppercase tracking-wider mb-3" data-key="objektif-intro">Panduan ini bertujuan untuk:</p>
+    <ul id="list-objektif" class="space-y-2">
+      <li class="flex items-start gap-2 group"><span class="text-hcf-gold mt-1 shrink-0">&#9670;</span><span class="edit-block text-sm text-slate-700 flex-1" data-key="obj-1">Memberi panduan lengkap kepada Rakan Hidayah/Sukarelawan dan mualaf.</span><button class="remove-item-btn h-5 w-5 rounded-full bg-red-100 text-red-500 text-xs items-center justify-center shrink-0">×</button></li>
+      <li class="flex items-start gap-2 group"><span class="text-hcf-gold mt-1 shrink-0">&#9670;</span><span class="edit-block text-sm text-slate-700 flex-1" data-key="obj-2">Menyeragamkan prosedur pengislaman di HCF Johor.</span><button class="remove-item-btn h-5 w-5 rounded-full bg-red-100 text-red-500 text-xs items-center justify-center shrink-0">×</button></li>
+      <li class="flex items-start gap-2 group"><span class="text-hcf-gold mt-1 shrink-0">&#9670;</span><span class="edit-block text-sm text-slate-700 flex-1" data-key="obj-3">Memastikan dokumen yang diperlukan disediakan dengan lengkap awal sebelum syahadah.</span><button class="remove-item-btn h-5 w-5 rounded-full bg-red-100 text-red-500 text-xs items-center justify-center shrink-0">×</button></li>
+      <li class="flex items-start gap-2 group"><span class="text-hcf-gold mt-1 shrink-0">&#9670;</span><span class="edit-block text-sm text-slate-700 flex-1" data-key="obj-4">Memudahkan proses pendaftaran mualaf.</span><button class="remove-item-btn h-5 w-5 rounded-full bg-red-100 text-red-500 text-xs items-center justify-center shrink-0">×</button></li>
+      <li class="flex items-start gap-2 group"><span class="text-hcf-gold mt-1 shrink-0">&#9670;</span><span class="edit-block text-sm text-slate-700 flex-1" data-key="obj-5">Menjadi rujukan kepada pegawai HCF Johor.</span><button class="remove-item-btn h-5 w-5 rounded-full bg-red-100 text-red-500 text-xs items-center justify-center shrink-0">×</button></li>
+    </ul>
+    <button data-add="list-objektif" class="add-item-btn mt-3 text-xs font-bold text-hcf-mid items-center gap-1"><span class="h-5 w-5 rounded-full bg-hcf-mid/10 flex items-center justify-center">+</span> Tambah Objektif</button>
+  </div>
+</section>
+
+<!-- ===== TAB: DOKUMEN ===== -->
+<section class="tab-panel" data-panel="dokumen">
+  <h2 class="font-display text-xl font-bold text-hcf-deep mb-1">2.0 Dokumen Diperlukan</h2>
+  <p class="text-xs text-slate-500 mb-5">Persediaan dokumen penting sebelum dan selepas majlis syahadah.</p>
+
+  <!-- 2.1 Wajib -->
+  <div class="bg-white rounded-xl border border-slate-200 p-4 mb-5 shadow-sm">
+    <h3 class="font-display font-bold text-hcf-deep text-base mb-1">2.1 Dokumen Wajib</h3>
+    <p class="edit-block text-xs text-slate-500 mb-4" data-key="wajib-intro">Pemohon hendaklah menyediakan dokumen berikut sebelum majlis syahadah:</p>
+    <ul id="list-dokumen-wajib" class="space-y-3">
+      <li class="flex items-start gap-3 bg-hcf-cream rounded-lg p-3 border border-slate-100 group"><div class="w-6 h-6 rounded-full bg-emerald-50 text-hcf-mid shrink-0 flex items-center justify-center text-xs font-bold border border-emerald-200 mt-0.5">✓</div><div class="flex-1 min-w-0"><p class="edit-block text-xs font-bold text-slate-800" data-key="wajib-1-j">Salinan Kad Pengenalan</p><p class="edit-block text-[11px] text-slate-500 mt-0.5" data-key="wajib-1-d">Disediakan bagi bahagian depan dan belakang.</p></div><button class="remove-item-btn h-5 w-5 rounded-full bg-red-100 text-red-500 text-xs items-center justify-center shrink-0">×</button></li>
+      <li class="flex items-start gap-3 bg-hcf-cream rounded-lg p-3 border border-slate-100 group"><div class="w-6 h-6 rounded-full bg-emerald-50 text-hcf-mid shrink-0 flex items-center justify-center text-xs font-bold border border-emerald-200 mt-0.5">✓</div><div class="flex-1 min-w-0"><p class="edit-block text-xs font-bold text-slate-800" data-key="wajib-2-j">Empat (4) Keping Gambar Pasport</p><p class="edit-block text-[11px] text-slate-500 mt-0.5" data-key="wajib-2-d">Mestilah berlatar belakang warna putih sahaja.</p></div><button class="remove-item-btn h-5 w-5 rounded-full bg-red-100 text-red-500 text-xs items-center justify-center shrink-0">×</button></li>
+      <li class="flex items-start gap-3 bg-hcf-cream rounded-lg p-3 border border-slate-100 group"><div class="w-6 h-6 rounded-full bg-emerald-50 text-hcf-mid shrink-0 flex items-center justify-center text-xs font-bold border border-emerald-200 mt-0.5">✓</div><div class="flex-1 min-w-0"><p class="edit-block text-xs font-bold text-slate-800" data-key="wajib-3-j">Salinan e-Statement Bank</p><p class="edit-block text-[11px] text-slate-500 mt-0.5" data-key="wajib-3-d">Salinan penyata akaun bank pemohon yang sah.</p></div><button class="remove-item-btn h-5 w-5 rounded-full bg-red-100 text-red-500 text-xs items-center justify-center shrink-0">×</button></li>
+      <li class="flex items-start gap-3 bg-hcf-cream rounded-lg p-3 border border-slate-100 group"><div class="w-6 h-6 rounded-full bg-emerald-50 text-hcf-mid shrink-0 flex items-center justify-center text-xs font-bold border border-emerald-200 mt-0.5">✓</div><div class="flex-1 min-w-0"><p class="edit-block text-xs font-bold text-slate-800" data-key="wajib-4-j">Membawa Seorang Saksi Lelaki (Islam)</p><p class="edit-block text-[11px] text-slate-500 mt-0.5" data-key="wajib-4-d">Sekurang-kurangnya seorang saksi mestilah Muslim.</p></div><button class="remove-item-btn h-5 w-5 rounded-full bg-red-100 text-red-500 text-xs items-center justify-center shrink-0">×</button></li>
+      <li class="flex items-start gap-3 bg-hcf-cream rounded-lg p-3 border border-slate-100 group"><div class="w-6 h-6 rounded-full bg-emerald-50 text-hcf-mid shrink-0 flex items-center justify-center text-xs font-bold border border-emerald-200 mt-0.5">✓</div><div class="flex-1 min-w-0"><p class="edit-block text-xs font-bold text-slate-800" data-key="wajib-5-j">Salinan Kad Pengenalan Saksi</p><p class="edit-block text-[11px] text-slate-500 mt-0.5" data-key="wajib-5-d">Sediakan salinan kad pengenalan bagi kedua-dua saksi.</p></div><button class="remove-item-btn h-5 w-5 rounded-full bg-red-100 text-red-500 text-xs items-center justify-center shrink-0">×</button></li>
+    </ul>
+    <button data-add="list-dokumen-wajib" class="add-item-btn mt-3 text-xs font-bold text-hcf-mid items-center gap-1"><span class="h-5 w-5 rounded-full bg-hcf-mid/10 flex items-center justify-center">+</span> Tambah Dokumen</button>
+  </div>
+
+  <!-- 2.2 Tukar Nama -->
+  <div class="bg-white rounded-xl border border-hcf-gold/30 p-4 mb-5 shadow-sm">
+    <h3 class="font-display font-bold text-hcf-deep text-base mb-1">2.2 Jika Ingin Menukar Nama</h3>
+    <p class="edit-block text-xs text-slate-500 mb-4" data-key="tukarnama-intro">Dokumen tambahan sekiranya pemohon memilih untuk menukar nama asal kepada nama Islam:</p>
+    <ul id="list-tukar-nama" class="space-y-3">
+      <li class="flex items-start gap-3 bg-amber-50/40 rounded-lg p-3 border border-amber-100 group"><div class="w-6 h-6 rounded-full bg-amber-50 text-hcf-gold shrink-0 flex items-center justify-center text-xs font-bold border border-amber-200 mt-0.5">+</div><div class="flex-1 min-w-0"><p class="edit-block text-xs font-bold text-slate-800" data-key="tn-1-j">Salinan Sijil Perkahwinan Ibu Bapa</p><p class="edit-block text-[11px] text-slate-500 mt-0.5" data-key="tn-1-d">Wajib disertakan untuk pengesahan nama keluarga.</p></div><button class="remove-item-btn h-5 w-5 rounded-full bg-red-100 text-red-500 text-xs items-center justify-center shrink-0">×</button></li>
+      <li class="flex items-start gap-3 bg-amber-50/40 rounded-lg p-3 border border-amber-100 group"><div class="w-6 h-6 rounded-full bg-amber-50 text-hcf-gold shrink-0 flex items-center justify-center text-xs font-bold border border-amber-200 mt-0.5">+</div><div class="flex-1 min-w-0"><p class="edit-block text-xs font-bold text-slate-800" data-key="tn-2-j">Dokumen Sokongan Lain</p><p class="edit-block text-[11px] text-slate-500 mt-0.5" data-key="tn-2-d">Contohnya: Sijil lahir asal (jika berkaitan).</p></div><button class="remove-item-btn h-5 w-5 rounded-full bg-red-100 text-red-500 text-xs items-center justify-center shrink-0">×</button></li>
+    </ul>
+    <button data-add="list-tukar-nama" class="add-item-btn mt-3 text-xs font-bold text-hcf-gold items-center gap-1"><span class="h-5 w-5 rounded-full bg-hcf-gold/10 flex items-center justify-center">+</span> Tambah Dokumen</button>
+  </div>
+
+  <!-- 2.3 Form Maklumat -->
+  <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+    <h3 class="font-display font-bold text-hcf-deep text-base mb-1">2.3 Maklumat Diperlukan</h3>
+    <p class="edit-block text-xs text-slate-500 mb-1" data-key="maklumat-intro">Isi maklumat di bawah dan hantar terus kepada pegawai HCF Johor melalui WhatsApp.</p>
+    <p id="wa-target-display" class="text-[11px] text-hcf-mid font-semibold mb-3">Nombor WhatsApp belum ditetapkan oleh admin.</p>
+    <div class="admin-only mb-3">
+      <button id="btn-edit-wa" class="inline-flex items-center gap-1.5 text-[11px] font-bold text-hcf-gold border border-hcf-gold/40 px-2.5 py-2 rounded-lg">✎ Tukar Nombor WhatsApp</button>
+    </div>
+    <div class="space-y-2.5">
+      <div><label class="block text-[10px] font-bold text-slate-500 mb-1">Nama Asal</label><input id="f-1" type="text" placeholder="Nama Asal" class="w-full text-xs rounded-lg border border-slate-200 bg-hcf-cream px-3 py-2 focus:outline-none focus:ring-2 focus:ring-hcf-gold/40"></div>
+      <div><label class="block text-[10px] font-bold text-slate-500 mb-1">Nama Baru</label><input id="f-2" type="text" placeholder="Nama Baru" class="w-full text-xs rounded-lg border border-slate-200 bg-hcf-cream px-3 py-2 focus:outline-none focus:ring-2 focus:ring-hcf-gold/40"></div>
+      <div><label class="block text-[10px] font-bold text-slate-500 mb-1">Agama / Kepercayaan Terdahulu</label><input id="f-3" type="text" placeholder="Agama / Kepercayaan Terdahulu" class="w-full text-xs rounded-lg border border-slate-200 bg-hcf-cream px-3 py-2 focus:outline-none focus:ring-2 focus:ring-hcf-gold/40"></div>
+      <div><label class="block text-[10px] font-bold text-slate-500 mb-1">Bangsa</label><input id="f-4" type="text" placeholder="Bangsa" class="w-full text-xs rounded-lg border border-slate-200 bg-hcf-cream px-3 py-2 focus:outline-none focus:ring-2 focus:ring-hcf-gold/40"></div>
+      <div><label class="block text-[10px] font-bold text-slate-500 mb-1">Warganegara</label><input id="f-5" type="text" placeholder="Warganegara" class="w-full text-xs rounded-lg border border-slate-200 bg-hcf-cream px-3 py-2 focus:outline-none focus:ring-2 focus:ring-hcf-gold/40"></div>
+      <div><label class="block text-[10px] font-bold text-slate-500 mb-1">No. Kad Pengenalan / Pasport</label><input id="f-6" type="text" placeholder="No. Kad Pengenalan / Pasport" class="w-full text-xs rounded-lg border border-slate-200 bg-hcf-cream px-3 py-2 focus:outline-none focus:ring-2 focus:ring-hcf-gold/40"></div>
+      <div><label class="block text-[10px] font-bold text-slate-500 mb-1">Tarikh Lahir</label><input id="f-7" type="text" placeholder="Tarikh Lahir" class="w-full text-xs rounded-lg border border-slate-200 bg-hcf-cream px-3 py-2 focus:outline-none focus:ring-2 focus:ring-hcf-gold/40"></div>
+      <div><label class="block text-[10px] font-bold text-slate-500 mb-1">Tempat Lahir</label><input id="f-8" type="text" placeholder="Tempat Lahir" class="w-full text-xs rounded-lg border border-slate-200 bg-hcf-cream px-3 py-2 focus:outline-none focus:ring-2 focus:ring-hcf-gold/40"></div>
+      <div><label class="block text-[10px] font-bold text-slate-500 mb-1">Status Perkahwinan</label><input id="f-9" type="text" placeholder="Status Perkahwinan" class="w-full text-xs rounded-lg border border-slate-200 bg-hcf-cream px-3 py-2 focus:outline-none focus:ring-2 focus:ring-hcf-gold/40"></div>
+      <div><label class="block text-[10px] font-bold text-slate-500 mb-1">Alamat Surat Menyurat</label><input id="f-10" type="text" placeholder="Alamat Surat Menyurat" class="w-full text-xs rounded-lg border border-slate-200 bg-hcf-cream px-3 py-2 focus:outline-none focus:ring-2 focus:ring-hcf-gold/40"></div>
+      <div><label class="block text-[10px] font-bold text-slate-500 mb-1">Bahasa</label><input id="f-11" type="text" placeholder="Bahasa" class="w-full text-xs rounded-lg border border-slate-200 bg-hcf-cream px-3 py-2 focus:outline-none focus:ring-2 focus:ring-hcf-gold/40"></div>
+      <div><label class="block text-[10px] font-bold text-slate-500 mb-1">Tahap Pendidikan</label><input id="f-12" type="text" placeholder="Tahap Pendidikan" class="w-full text-xs rounded-lg border border-slate-200 bg-hcf-cream px-3 py-2 focus:outline-none focus:ring-2 focus:ring-hcf-gold/40"></div>
+      <div><label class="block text-[10px] font-bold text-slate-500 mb-1">No. Telefon / Emel</label><input id="f-13" type="text" placeholder="No. Telefon / Emel" class="w-full text-xs rounded-lg border border-slate-200 bg-hcf-cream px-3 py-2 focus:outline-none focus:ring-2 focus:ring-hcf-gold/40"></div>
+      <div><label class="block text-[10px] font-bold text-slate-500 mb-1">Pekerjaan</label><input id="f-14" type="text" placeholder="Pekerjaan" class="w-full text-xs rounded-lg border border-slate-200 bg-hcf-cream px-3 py-2 focus:outline-none focus:ring-2 focus:ring-hcf-gold/40"></div>
+      <div><label class="block text-[10px] font-bold text-slate-500 mb-1">Alamat Tempat Kerja</label><input id="f-15" type="text" placeholder="Alamat Tempat Kerja" class="w-full text-xs rounded-lg border border-slate-200 bg-hcf-cream px-3 py-2 focus:outline-none focus:ring-2 focus:ring-hcf-gold/40"></div>
+    </div>
+    <button id="btn-send-wa" class="mt-4 w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-3 rounded-xl shadow-sm">
+      <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.9 4.44-9.9 9.9 0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 004.79 1.22h.01c5.46 0 9.9-4.44 9.9-9.9 0-2.64-1.03-5.13-2.9-7C17.18 3.03 14.68 2 12.04 2zm0 18.1a8.2 8.2 0 01-4.18-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 01-1.26-4.34c0-4.53 3.7-8.23 8.24-8.23 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 012.4 5.82c0 4.53-3.7 8.19-8.24 8.19zm4.52-6.16c-.25-.12-1.47-.72-1.7-.81-.23-.08-.4-.12-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.39-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43s.16-.25.25-.41c.08-.17.04-.31-.02-.43-.06-.12-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43-.14-.01-.31-.01-.48-.01-.17 0-.43.06-.66.31-.23.25-.86.84-.86 2.05 0 1.21.88 2.38 1 2.54.12.17 1.74 2.65 4.21 3.72.59.25 1.05.4 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.1-.23-.16-.48-.28z"/></svg>
+      Hantar Maklumat ke WhatsApp
+    </button>
+  </div>
+</section>
+
+<!-- ===== TAB: PROSES ===== -->
+<section class="tab-panel" data-panel="proses">
+  <h2 class="font-display text-xl font-bold text-hcf-deep mb-1">3.0 Proses Pendaftaran</h2>
+  <p class="text-xs text-slate-500 mb-5">Klik setiap langkah untuk lihat butiran penuh.</p>
+  <div class="space-y-3">
+
+    <!-- Langkah 1 -->
+    <div class="accordion-item bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+      <button class="accordion-header w-full flex items-center gap-3 p-4 text-left">
+        <span class="w-8 h-8 rounded-full bg-hcf-deep text-white text-xs font-bold flex items-center justify-center shrink-0">1</span>
+        <span class="font-display font-bold text-sm text-hcf-deep flex-1">Penerangan Tentang Islam (ASARA-PK)</span>
+        <svg class="chevron h-4 w-4 text-slate-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="accordion-body">
+        <div class="px-4 pb-4 space-y-3">
+          <p class="edit-block text-sm leading-relaxed text-slate-600" data-key="l1-desc">Sesi penerangan Islam bertujuan memberi kefahaman asas mengenai ajaran agama Islam sebelum seseorang mualaf membuat keputusan memeluk Islam.</p>
+          <div class="bg-hcf-mid/5 p-3 rounded-lg border border-hcf-mid/15">
+            <p class="text-[10px] font-bold text-hcf-mid mb-2 uppercase tracking-wider">Perkara Yang Akan Diterangkan</p>
+            <ul id="list-l1" class="space-y-1.5">
+              <li class="flex items-center gap-2 group"><span class="text-hcf-gold text-xs">•</span><span class="edit-block text-xs text-slate-700 flex-1" data-key="l1-p1">Konsep Ketuhanan Dalam Islam</span><button class="remove-item-btn h-4 w-4 rounded-full bg-red-100 text-red-500 text-[10px] items-center justify-center shrink-0">×</button></li>
+              <li class="flex items-center gap-2 group"><span class="text-hcf-gold text-xs">•</span><span class="edit-block text-xs text-slate-700 flex-1" data-key="l1-p2">Rukun Iman &amp; Rukun Islam</span><button class="remove-item-btn h-4 w-4 rounded-full bg-red-100 text-red-500 text-[10px] items-center justify-center shrink-0">×</button></li>
+              <li class="flex items-center gap-2 group"><span class="text-hcf-gold text-xs">•</span><span class="edit-block text-xs text-slate-700 flex-1" data-key="l1-p3">Akhlak Muslim &amp; Tanggungjawab</span><button class="remove-item-btn h-4 w-4 rounded-full bg-red-100 text-red-500 text-[10px] items-center justify-center shrink-0">×</button></li>
+              <li class="flex items-center gap-2 group"><span class="text-hcf-gold text-xs">•</span><span class="edit-block text-xs text-slate-700 flex-1" data-key="l1-p4">Kehidupan Selepas Pengislaman</span><button class="remove-item-btn h-4 w-4 rounded-full bg-red-100 text-red-500 text-[10px] items-center justify-center shrink-0">×</button></li>
+            </ul>
+            <button data-add="list-l1" class="add-item-btn mt-2 text-[11px] font-bold text-hcf-mid items-center gap-1">+ Tambah Perkara</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Langkah 2 -->
+    <div class="accordion-item bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+      <button class="accordion-header w-full flex items-center gap-3 p-4 text-left">
+        <span class="w-8 h-8 rounded-full bg-hcf-deep text-white text-xs font-bold flex items-center justify-center shrink-0">2</span>
+        <span class="font-display font-bold text-sm text-hcf-deep flex-1">Melafazkan Syahadah</span>
+        <svg class="chevron h-4 w-4 text-slate-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="accordion-body">
+        <div class="px-4 pb-4 space-y-3">
+          <p class="edit-block text-sm leading-relaxed text-slate-600" data-key="l2-desc">Setelah memahami asas agama Islam dan bersedia, pemohon akan dibimbing melafazkan Dua Kalimah Syahadah secara sukarela.</p>
+          <div class="bg-hcf-cream p-5 rounded-lg border border-hcf-gold/30 text-center space-y-3">
+            <p class="text-[10px] font-bold text-hcf-gold uppercase tracking-widest">Lafaz Syahadah</p>
+            <p class="font-display text-xl text-hcf-deep leading-relaxed" dir="rtl">أشهد أن لا إله إلا الله وأشهد أن محمدًا رسول الله</p>
+            <p class="edit-block text-xs text-slate-500 italic" data-key="l2-terjemahan">"Aku bersaksi bahawa tiada Tuhan yang berhak disembah melainkan Allah dan aku bersaksi bahawa Nabi Muhammad SAW ialah pesuruh Allah."</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Langkah 3 -->
+    <div class="accordion-item bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+      <button class="accordion-header w-full flex items-center gap-3 p-4 text-left">
+        <span class="w-8 h-8 rounded-full bg-hcf-deep text-white text-xs font-bold flex items-center justify-center shrink-0">3</span>
+        <span class="font-display font-bold text-sm text-hcf-deep flex-1">Mengisi Borang Ikrar Memeluk Islam</span>
+        <svg class="chevron h-4 w-4 text-slate-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="accordion-body">
+        <div class="px-4 pb-4 space-y-3">
+          <p class="edit-block text-sm leading-relaxed text-slate-600" data-key="l3-desc">Selepas syahadah, pemohon hendaklah melengkapkan Borang Ikrar Memeluk Islam untuk dibawa ke Pejabat Agama Johor bagi pengesahan.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Langkah 4 -->
+    <div class="accordion-item bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+      <button class="accordion-header w-full flex items-center gap-3 p-4 text-left">
+        <span class="w-8 h-8 rounded-full bg-hcf-deep text-white text-xs font-bold flex items-center justify-center shrink-0">4</span>
+        <span class="font-display font-bold text-sm text-hcf-deep flex-1">Borang Permohonan Pendaftaran Mualaf</span>
+        <svg class="chevron h-4 w-4 text-slate-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="accordion-body">
+        <div class="px-4 pb-4 space-y-3">
+          <p class="edit-block text-sm leading-relaxed text-slate-600" data-key="l4-desc">Pemohon hendaklah mengisi Borang Permohonan Pendaftaran Mualaf dengan lengkap untuk simpanan fail rekod rasmi.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Langkah 5 -->
+    <div class="accordion-item bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+      <button class="accordion-header w-full flex items-center gap-3 p-4 text-left">
+        <span class="w-8 h-8 rounded-full bg-hcf-deep text-white text-xs font-bold flex items-center justify-center shrink-0">5</span>
+        <span class="font-display font-bold text-sm text-hcf-deep flex-1">Membuat Laporan Polis</span>
+        <svg class="chevron h-4 w-4 text-slate-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="accordion-body">
+        <div class="px-4 pb-4 space-y-3">
+          <p class="edit-block text-sm leading-relaxed text-slate-600" data-key="l5-desc">Laporan polis dibuat bagi mengesahkan bahawa pemohon memeluk agama Islam secara sukarela dan tanpa paksaan.</p>
+          <div class="bg-slate-50 p-3 rounded-lg border border-slate-200">
+            <p class="text-[10px] font-bold text-slate-600 mb-2 uppercase tracking-wider">Dokumen Yang Perlu Dibawa</p>
+            <ul id="list-l5" class="space-y-1.5">
+              <li class="flex items-center gap-2 group"><span class="text-hcf-gold text-xs">1.</span><span class="edit-block text-xs text-slate-600 flex-1">Kad Pengenalan Asal</span><button class="remove-item-btn h-4 w-4 rounded-full bg-red-100 text-red-500 text-[10px] items-center justify-center shrink-0">×</button></li>
+              <li class="flex items-center gap-2 group"><span class="text-hcf-gold text-xs">2.</span><span class="edit-block text-xs text-slate-600 flex-1">Borang Ikrar Memeluk Islam</span><button class="remove-item-btn h-4 w-4 rounded-full bg-red-100 text-red-500 text-[10px] items-center justify-center shrink-0">×</button></li>
+            </ul>
+            <button data-add="list-l5" class="add-item-btn mt-2 text-[11px] font-bold text-hcf-mid items-center gap-1">+ Tambah</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Langkah 6 -->
+    <div class="accordion-item bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+      <button class="accordion-header w-full flex items-center gap-3 p-4 text-left">
+        <span class="w-8 h-8 rounded-full bg-hcf-deep text-white text-xs font-bold flex items-center justify-center shrink-0">6</span>
+        <span class="font-display font-bold text-sm text-hcf-deep flex-1">Akuan Sumpah Di Pesuruhjaya Sumpah</span>
+        <svg class="chevron h-4 w-4 text-slate-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="accordion-body">
+        <div class="px-4 pb-4 space-y-3">
+          <p class="edit-block text-sm leading-relaxed text-slate-600" data-key="l6-desc">Pemohon hendaklah hadir ke pejabat Pesuruhjaya Sumpah bagi membuat Akuan Sumpah Pengislaman.</p>
+          <div class="bg-amber-50 border border-amber-200 text-xs text-amber-900 p-3 rounded-lg">
+            <span class="font-bold">Pesuruhjaya Disyorkan: </span>
+            <span class="edit-block" data-key="l6-nota">Zainurani binti Omar — 23A Bangunan Kerjasama, Jalan Dhobi, 80000 Johor Bahru, Johor.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Langkah 7 -->
+    <div class="accordion-item bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+      <button class="accordion-header w-full flex items-center gap-3 p-4 text-left">
+        <span class="w-8 h-8 rounded-full bg-hcf-deep text-white text-xs font-bold flex items-center justify-center shrink-0">7</span>
+        <span class="font-display font-bold text-sm text-hcf-deep flex-1">Penyerahan Dokumen Kepada HCF Johor</span>
+        <svg class="chevron h-4 w-4 text-slate-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="accordion-body">
+        <div class="px-4 pb-4 space-y-3">
+          <p class="edit-block text-sm leading-relaxed text-slate-600" data-key="l7-desc">Selepas selesai urusan laporan polis dan akuan sumpah, pemohon hendaklah menyerahkan dokumen yang dilengkapkan kepada HCF Johor.</p>
+          <div class="bg-slate-50 p-3 rounded-lg border border-slate-200">
+            <p class="text-[10px] font-bold text-slate-600 mb-2 uppercase tracking-wider">Dokumen Wajib Diserahkan</p>
+            <ul id="list-l7" class="space-y-1.5">
+              <li class="flex items-center gap-2 group"><span class="text-hcf-gold text-xs">☐</span><span class="edit-block text-xs text-slate-600 flex-1">Borang Ikrar Memeluk Islam</span><button class="remove-item-btn h-4 w-4 rounded-full bg-red-100 text-red-500 text-[10px] items-center justify-center shrink-0">×</button></li>
+              <li class="flex items-center gap-2 group"><span class="text-hcf-gold text-xs">☐</span><span class="edit-block text-xs text-slate-600 flex-1">Laporan Polis</span><button class="remove-item-btn h-4 w-4 rounded-full bg-red-100 text-red-500 text-[10px] items-center justify-center shrink-0">×</button></li>
+              <li class="flex items-center gap-2 group"><span class="text-hcf-gold text-xs">☐</span><span class="edit-block text-xs text-slate-600 flex-1">Akuan Sumpah</span><button class="remove-item-btn h-4 w-4 rounded-full bg-red-100 text-red-500 text-[10px] items-center justify-center shrink-0">×</button></li>
+            </ul>
+            <button data-add="list-l7" class="add-item-btn mt-2 text-[11px] font-bold text-hcf-mid items-center gap-1">+ Tambah Dokumen</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== TAB: LOKASI ===== -->
+<section class="tab-panel" data-panel="lokasi">
+  <h2 class="font-display text-xl font-bold text-hcf-deep mb-1">Lokasi &amp; Alamat Penting</h2>
+  <p class="text-xs text-slate-500 mb-5">Klik "Buka Peta" untuk navigasi terus melalui Google Maps.</p>
+  <ul id="list-lokasi" class="space-y-4">
+    <li class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm group">
+      <div class="flex items-start gap-3 mb-2">
+        <span class="w-8 h-8 rounded-full bg-hcf-deep text-white flex items-center justify-center shrink-0"><svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.1-7-11a7 7 0 1114 0c0 4.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.3"/></svg></span>
+        <div class="flex-1 min-w-0"><p class="edit-block text-sm font-bold text-hcf-deep" data-key="lok1-j">Jabatan Agama Islam Johor</p><p class="edit-block text-xs text-slate-500 mt-0.5" data-key="lok1-d">Blok B, Aras 2</p></div>
+        <button class="remove-item-btn h-5 w-5 rounded-full bg-red-100 text-red-500 text-xs items-center justify-center shrink-0">×</button>
+      </div>
+      <div class="flex items-center gap-2 flex-wrap">
+        <a href="https://maps.app.goo.gl/PejKkayCimgcuQhAA" data-url="https://maps.app.goo.gl/PejKkayCimgcuQhAA" target="_blank" rel="noopener" class="map-link inline-flex items-center gap-1.5 text-xs font-bold text-white bg-hcf-mid px-3 py-2 rounded-lg"><svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.1-7-11a7 7 0 1114 0c0 4.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.3"/></svg>Buka Peta</a>
+        <button class="edit-link-btn admin-only inline-flex items-center text-[11px] font-bold text-hcf-gold border border-hcf-gold/40 px-2.5 py-2 rounded-lg">✎ Tukar Pautan</button>
+      </div>
+    </li>
+    <li class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm group">
+      <div class="flex items-start gap-3 mb-2">
+        <span class="w-8 h-8 rounded-full bg-hcf-deep text-white flex items-center justify-center shrink-0"><svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.1-7-11a7 7 0 1114 0c0 4.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.3"/></svg></span>
+        <div class="flex-1 min-w-0"><p class="edit-block text-sm font-bold text-hcf-deep" data-key="lok2-j">Balai Polis Sentral (Central Police Station)</p><p class="edit-block text-xs text-slate-500 mt-0.5" data-key="lok2-d">Untuk membuat laporan polis pengislaman.</p></div>
+        <button class="remove-item-btn h-5 w-5 rounded-full bg-red-100 text-red-500 text-xs items-center justify-center shrink-0">×</button>
+      </div>
+      <div class="flex items-center gap-2 flex-wrap">
+        <a href="https://maps.app.goo.gl/rantCDQJK5wB3Mu68" data-url="https://maps.app.goo.gl/rantCDQJK5wB3Mu68" target="_blank" rel="noopener" class="map-link inline-flex items-center gap-1.5 text-xs font-bold text-white bg-hcf-mid px-3 py-2 rounded-lg"><svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.1-7-11a7 7 0 1114 0c0 4.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.3"/></svg>Buka Peta</a>
+        <button class="edit-link-btn admin-only inline-flex items-center text-[11px] font-bold text-hcf-gold border border-hcf-gold/40 px-2.5 py-2 rounded-lg">✎ Tukar Pautan</button>
+      </div>
+    </li>
+    <li class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm group">
+      <div class="flex items-start gap-3 mb-2">
+        <span class="w-8 h-8 rounded-full bg-hcf-deep text-white flex items-center justify-center shrink-0"><svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.1-7-11a7 7 0 1114 0c0 4.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.3"/></svg></span>
+        <div class="flex-1 min-w-0"><p class="edit-block text-sm font-bold text-hcf-deep" data-key="lok3-j">Pesuruhjaya Sumpah (Commissioner of Oaths)</p><p class="edit-block text-xs text-slate-500 mt-0.5" data-key="lok3-d">Zainurani binti Omar — 23A Bangunan Kerjasama, Jalan Dhobi, 80000 Johor Bahru.</p></div>
+        <button class="remove-item-btn h-5 w-5 rounded-full bg-red-100 text-red-500 text-xs items-center justify-center shrink-0">×</button>
+      </div>
+      <div class="flex items-center gap-2 flex-wrap">
+        <a href="https://maps.app.goo.gl/NR1Tfj6zstaTz4ux7" data-url="https://maps.app.goo.gl/NR1Tfj6zstaTz4ux7" target="_blank" rel="noopener" class="map-link inline-flex items-center gap-1.5 text-xs font-bold text-white bg-hcf-mid px-3 py-2 rounded-lg"><svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.1-7-11a7 7 0 1114 0c0 4.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.3"/></svg>Buka Peta</a>
+        <button class="edit-link-btn admin-only inline-flex items-center text-[11px] font-bold text-hcf-gold border border-hcf-gold/40 px-2.5 py-2 rounded-lg">✎ Tukar Pautan</button>
+      </div>
+    </li>
+  </ul>
+  <button data-add="list-lokasi" class="add-item-btn mt-4 text-xs font-bold text-hcf-mid items-center gap-1"><span class="h-5 w-5 rounded-full bg-hcf-mid/10 flex items-center justify-center">+</span> Tambah Lokasi</button>
+</section>
+
+<!-- ===== TAB: LAMPIRAN ===== -->
+<section class="tab-panel" data-panel="lampiran">
+  <h2 class="font-display text-xl font-bold text-hcf-deep mb-1">5.0 Ruang Lampiran</h2>
+  <p class="text-xs text-slate-500 mb-5">Muat naik sampel atau borang rasmi terus ke dalam panduan ini.</p>
+  <div class="space-y-5">
+    <div class="border border-dashed border-slate-300 rounded-xl p-4 bg-white relative">
+      <div class="absolute top-3 right-3 bg-hcf-deep text-white font-bold text-[10px] px-2 py-0.5 rounded">LAMPIRAN A</div>
+      <p class="edit-block font-bold text-slate-800 text-sm mb-1" data-key="lamA-j">Borang Ikrar Memeluk Islam</p>
+      <p class="edit-block text-xs text-slate-500 mb-3" data-key="lamA-d">Sila muat naik imej atau PDF borang ikrar memeluk Islam.</p>
+      <div class="admin-only"><input type="file" accept="image/*,application/pdf" onchange="previewFile(this,'preview-A')" class="block w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-hcf-mid hover:file:bg-emerald-100 cursor-pointer mb-3"></div>
+      <p class="non-admin-only text-[11px] text-slate-400 italic mb-3">Hanya admin boleh memuat naik dokumen di sini.</p>
+      <div id="preview-A" class="border-2 border-dashed border-slate-300 rounded-lg min-h-32 bg-hcf-cream flex flex-col items-center justify-center p-3 text-center"><span class="text-xs text-slate-500 font-medium">Belum ada lampiran</span><span class="text-[10px] text-slate-400 mt-1">JPG, PNG atau PDF</span></div>
+    </div>
+    <div class="border border-dashed border-slate-300 rounded-xl p-4 bg-white relative">
+      <div class="absolute top-3 right-3 bg-hcf-deep text-white font-bold text-[10px] px-2 py-0.5 rounded">LAMPIRAN B</div>
+      <p class="edit-block font-bold text-slate-800 text-sm mb-1" data-key="lamB-j">Borang Permohonan Pendaftaran Mualaf</p>
+      <p class="edit-block text-xs text-slate-500 mb-3" data-key="lamB-d">Sila muat naik contoh atau borang pendaftaran mualaf rasmi.</p>
+      <div class="admin-only"><input type="file" accept="image/*,application/pdf" onchange="previewFile(this,'preview-B')" class="block w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-hcf-mid hover:file:bg-emerald-100 cursor-pointer mb-3"></div>
+      <p class="non-admin-only text-[11px] text-slate-400 italic mb-3">Hanya admin boleh memuat naik dokumen di sini.</p>
+      <div id="preview-B" class="border-2 border-dashed border-slate-300 rounded-lg min-h-32 bg-hcf-cream flex flex-col items-center justify-center p-3 text-center"><span class="text-xs text-slate-500 font-medium">Belum ada lampiran</span><span class="text-[10px] text-slate-400 mt-1">JPG, PNG atau PDF</span></div>
+    </div>
+    <div class="border border-dashed border-slate-300 rounded-xl p-4 bg-white relative">
+      <div class="absolute top-3 right-3 bg-hcf-deep text-white font-bold text-[10px] px-2 py-0.5 rounded">LAMPIRAN C</div>
+      <p class="edit-block font-bold text-slate-800 text-sm mb-1" data-key="lamC-j">Contoh Laporan Polis</p>
+      <p class="edit-block text-xs text-slate-500 mb-3" data-key="lamC-d">Sila muat naik sampel salinan laporan polis yang telah siap diisi/dicop.</p>
+      <div class="admin-only"><input type="file" accept="image/*,application/pdf" onchange="previewFile(this,'preview-C')" class="block w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-hcf-mid hover:file:bg-emerald-100 cursor-pointer mb-3"></div>
+      <p class="non-admin-only text-[11px] text-slate-400 italic mb-3">Hanya admin boleh memuat naik dokumen di sini.</p>
+      <div id="preview-C" class="border-2 border-dashed border-slate-300 rounded-lg min-h-32 bg-hcf-cream flex flex-col items-center justify-center p-3 text-center"><span class="text-xs text-slate-500 font-medium">Belum ada lampiran</span><span class="text-[10px] text-slate-400 mt-1">JPG, PNG atau PDF</span></div>
+    </div>
+    <div class="border border-dashed border-slate-300 rounded-xl p-4 bg-white relative">
+      <div class="absolute top-3 right-3 bg-hcf-deep text-white font-bold text-[10px] px-2 py-0.5 rounded">LAMPIRAN D</div>
+      <p class="edit-block font-bold text-slate-800 text-sm mb-1" data-key="lamD-j">Contoh Akuan Sumpah</p>
+      <p class="edit-block text-xs text-slate-500 mb-3" data-key="lamD-d">Sila muat naik sampel borang akuan sumpah di hadapan Pesuruhjaya Sumpah.</p>
+      <div class="admin-only"><input type="file" accept="image/*,application/pdf" onchange="previewFile(this,'preview-D')" class="block w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-hcf-mid hover:file:bg-emerald-100 cursor-pointer mb-3"></div>
+      <p class="non-admin-only text-[11px] text-slate-400 italic mb-3">Hanya admin boleh memuat naik dokumen di sini.</p>
+      <div id="preview-D" class="border-2 border-dashed border-slate-300 rounded-lg min-h-32 bg-hcf-cream flex flex-col items-center justify-center p-3 text-center"><span class="text-xs text-slate-500 font-medium">Belum ada lampiran</span><span class="text-[10px] text-slate-400 mt-1">JPG, PNG atau PDF</span></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ADMIN TOOLBAR -->
+<div id="admin-toolbar" class="fixed bottom-16 left-0 right-0 max-w-[480px] mx-auto bg-hcf-ink text-white px-3 py-2.5 flex items-center gap-2 z-50 shadow-2xl overflow-x-auto">
+  <button id="btn-save" class="flex items-center gap-1.5 bg-hcf-gold text-hcf-ink font-bold text-xs px-3 py-2 rounded-lg shrink-0">💾 Simpan</button>
+  <button id="btn-export" class="flex items-center gap-1.5 bg-white/10 hover:bg-white/20 font-bold text-xs px-3 py-2 rounded-lg shrink-0">⬇ Muat Turun</button>
+  <button id="btn-reset" class="flex items-center gap-1.5 bg-white/10 hover:bg-white/20 font-bold text-xs px-3 py-2 rounded-lg shrink-0">↺ Set Semula</button>
+  <button id="btn-exit-admin" class="flex items-center gap-1.5 bg-red-500/80 hover:bg-red-500 font-bold text-xs px-3 py-2 rounded-lg shrink-0 ml-auto">✕ Keluar</button>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="fixed bottom-0 left-0 right-0 max-w-[480px] mx-auto bg-hcf-deep border-t-2 border-hcf-gold flex justify-between px-1 z-40">
+  <button data-tab="info" class="nav-btn active flex-1 flex flex-col items-center gap-0.5 py-2.5">
+    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+    <span class="text-[10px] font-semibold">Info</span><span class="nav-dot h-1 w-1 rounded-full bg-hcf-goldsoft"></span>
+  </button>
+  <button data-tab="dokumen" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2.5">
+    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12h6m-6 4h6M9 8h6M5 21V5a2 2 0 012-2h7l5 5v13a2 2 0 01-2 2H7a2 2 0 01-2-2z"/></svg>
+    <span class="text-[10px] font-semibold">Dokumen</span><span class="nav-dot h-1 w-1 rounded-full bg-hcf-goldsoft"></span>
+  </button>
+  <button data-tab="proses" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2.5">
+    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12l2 2 4-4"/></svg>
+    <span class="text-[10px] font-semibold">Proses</span><span class="nav-dot h-1 w-1 rounded-full bg-hcf-goldsoft"></span>
+  </button>
+  <button data-tab="lokasi" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2.5">
+    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-6.1-7-11a7 7 0 1114 0c0 4.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.3"/></svg>
+    <span class="text-[10px] font-semibold">Lokasi</span><span class="nav-dot h-1 w-1 rounded-full bg-hcf-goldsoft"></span>
+  </button>
+  <button data-tab="lampiran" class="nav-btn flex-1 flex flex-col items-center gap-0.5 py-2.5">
+    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21.44 11.05l-9.19 9.19a5 5 0 01-7.07-7.07l9.19-9.19a3.5 3.5 0 014.95 4.95l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+    <span class="text-[10px] font-semibold">Lampiran</span><span class="nav-dot h-1 w-1 rounded-full bg-hcf-goldsoft"></span>
+  </button>
+</nav>
+
+</div><!-- /app-shell -->
+
+<!-- TOAST -->
+<div id="toast" class="fixed bottom-20 left-1/2 -translate-x-1/2 max-w-[90%] bg-hcf-ink text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-2xl z-[60] text-center" style="opacity:0;pointer-events:none;transition:opacity .3s"></div>
+
+<!-- MODAL — custom prompt/confirm (window.prompt blocked in sandboxed iframes) -->
+<div id="modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;align-items:center;justify-content:center;padding:1.5rem">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-5">
+    <p id="modal-title" class="font-display font-bold text-hcf-deep text-base mb-1"></p>
+    <p id="modal-desc" class="text-xs text-slate-500 mb-3" style="display:none"></p>
+    <input id="modal-input" type="text" class="w-full text-sm rounded-lg border border-slate-300 px-3 py-2.5 mb-4 focus:outline-none focus:ring-2 focus:ring-hcf-gold/50" style="display:none">
+    <div class="flex items-center gap-2">
+      <button id="modal-cancel" class="flex-1 text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 px-3 py-2.5 rounded-lg">Batal</button>
+      <button id="modal-ok" class="flex-1 text-xs font-bold text-white bg-hcf-deep hover:bg-hcf-mid px-3 py-2.5 rounded-lg">OK</button>
+    </div>
+  </div>
+</div>
+
+<!-- PRISTINE SNAPSHOT (for reset) -->
+<template id="pristine-template"></template>
+
+<script>
+(function(){
+'use strict';
+
+// ── CONSTANTS ─────────────────────────────────────────────────────
+const PASS='HCFJ1448';
+const K={
+  html:'hcf_panduan_v5_html',
+  wa  :'hcf_panduan_v5_wa',
+  logo:'hcf_panduan_v5_logo',
+  files:'hcf_panduan_v5_files'
+};
+
+// ── STATE ─────────────────────────────────────────────────────────
+var isAdmin=false, waNum='', autosaveT=null, toastT=null, ADMIN_KEY='';
+
+// ── DOM ───────────────────────────────────────────────────────────
+var body=document.body;
+var con=document.getElementById('app-content');
+var tpl=document.getElementById('pristine-template');
+tpl.innerHTML=con.innerHTML; // snapshot before any load
+
+// ── STORAGE: Vercel KV API (cross-device) + localStorage cache ───
+// When hosted on Vercel: /api/store persists to Redis KV (all devices sync)
+// When running locally or in Claude.ai: falls back to localStorage only
+var ON_VERCEL = window.location.hostname !== 'localhost' &&
+                !window.location.hostname.includes('claude.ai') &&
+                !window.location.hostname.includes('anthropic');
+
+var DB={
+  get:async function(k){
+    if(ON_VERCEL){
+      try{
+        var r=await fetch('/api/store?key='+encodeURIComponent(k),{cache:'no-store'});
+        if(r.ok){var d=await r.json();if(d.value!==null&&d.value!==undefined)return d.value;}
+      }catch(e){}
+    }
+    // fallback: window.storage (Claude.ai) then localStorage
+    if(window.storage){try{var rs=await window.storage.get(k,true);if(rs&&rs.value!==undefined)return rs.value;}catch(e){}}
+    try{return localStorage.getItem(k);}catch(e){return null;}
+  },
+  set:async function(k,v){
+    var ok=false;
+    if(ON_VERCEL){
+      try{
+        var r=await fetch('/api/store?key='+encodeURIComponent(k),{
+          method:'POST',
+          headers:{'Content-Type':'application/json','x-admin-key':ADMIN_KEY},
+          body:JSON.stringify({value:v})
+        });
+        if(r.ok)ok=true;
+        else if(r.status===413){return 'toobig';}
+      }catch(e){}
+    }
+    if(window.storage){try{await window.storage.set(k,v,true);ok=true;}catch(e){}}
+    try{localStorage.setItem(k,v);ok=true;}catch(e){}
+    return ok;
+  },
+  del:async function(k){
+    if(ON_VERCEL){
+      try{await fetch('/api/store?key='+encodeURIComponent(k),{method:'DELETE',headers:{'x-admin-key':ADMIN_KEY}});}catch(e){}
+    }
+    if(window.storage)try{await window.storage.delete(k,true);}catch(e){}
+    try{localStorage.removeItem(k);}catch(e){}
+  }
+};
+
+// ── TOAST ─────────────────────────────────────────────────────────
+function toast(msg){
+  var el=document.getElementById('toast');
+  if(!el)return;
+  el.textContent=msg;
+  el.style.opacity='1';el.style.pointerEvents='auto';
+  clearTimeout(toastT);
+  toastT=setTimeout(function(){el.style.opacity='0';el.style.pointerEvents='none';},2800);
+}
+
+// ── CUSTOM MODAL (window.prompt/confirm blocked in sandbox) ───────
+var mOv=document.getElementById('modal-overlay');
+var mTit=document.getElementById('modal-title');
+var mDsc=document.getElementById('modal-desc');
+var mInp=document.getElementById('modal-input');
+var mOk=document.getElementById('modal-ok');
+var mCnl=document.getElementById('modal-cancel');
+var mRes=null;
+
+function showModal(o){
+  o=o||{};
+  mTit.textContent=o.title||'';
+  mDsc.textContent=o.desc||'';
+  mDsc.style.display=o.desc?'':'none';
+  mInp.style.display=o.hideInput?'none':'';
+  if(!o.hideInput){
+    mInp.type=o.inputType||'text';
+    mInp.placeholder=o.placeholder||'';
+    mInp.value=o.defaultValue||'';
+  }
+  mOv.style.display='flex';
+  if(!o.hideInput)setTimeout(function(){mInp.focus();},80);
+  return new Promise(function(res){mRes=res;});
+}
+function closeModal(v){
+  mOv.style.display='none';
+  if(mRes){mRes(v);mRes=null;}
+}
+mOk.addEventListener('click',function(){closeModal(mInp.style.display==='none'?true:mInp.value);});
+mCnl.addEventListener('click',function(){closeModal(null);});
+mInp.addEventListener('keydown',function(e){
+  if(e.key==='Enter')closeModal(mInp.value);
+  if(e.key==='Escape')closeModal(null);
+});
+
+// ── ADMIN ─────────────────────────────────────────────────────────
+function setEditable(on){
+  document.querySelectorAll('.edit-block').forEach(function(el){el.contentEditable=on?'true':'false';});
+}
+function enterAdmin(){
+  isAdmin=true;ADMIN_KEY=PASS;body.classList.add('admin-mode');setEditable(true);
+  document.getElementById('lock-icon-closed').classList.add('hidden');
+  document.getElementById('lock-icon-open').classList.remove('hidden');
+  toast('Mod Admin aktif ✓');
+}
+function exitAdmin(){
+  isAdmin=false;ADMIN_KEY='';body.classList.remove('admin-mode');setEditable(false);
+  document.getElementById('lock-icon-closed').classList.remove('hidden');
+  document.getElementById('lock-icon-open').classList.add('hidden');
+}
+
+// ── CONTENT ───────────────────────────────────────────────────────
+async function saveHTML(silent){
+  var ok=await DB.set(K.html,con.innerHTML);
+  if(!silent){
+    if(ok==='toobig')toast('Kandungan terlalu besar — cuba kurangkan imej');
+    else toast(ok?'Disimpan ✓ (semua peranti akan dapat data terkini)':'Disimpan dalam peranti ini sahaja');
+  }
+}
+async function loadHTML(){
+  var v=await DB.get(K.html);
+  if(v)con.innerHTML=v;
+}
+function scheduleAutosave(){
+  clearTimeout(autosaveT);
+  autosaveT=setTimeout(function(){saveHTML(true);},1500);
+}
+
+// ── NAVIGATION ────────────────────────────────────────────────────
+function initUI(){
+  document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});
+  var p=document.querySelector('.tab-panel[data-panel="info"]');
+  var b=document.querySelector('.nav-btn[data-tab="info"]');
+  if(p)p.classList.add('active');
+  if(b)b.classList.add('active');
+  document.querySelectorAll('.accordion-item').forEach(function(it){it.classList.remove('open');});
+  con.scrollTop=0;
+}
+function switchTab(name){
+  document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.toggle('active',p.dataset.panel===name);});
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.toggle('active',b.dataset.tab===name);});
+  con.scrollTop=0;
+}
+
+// ── WHATSAPP ──────────────────────────────────────────────────────
+function updateWaDisplay(){
+  var el=document.getElementById('wa-target-display');
+  if(el)el.textContent=waNum?'Maklumat akan dihantar ke: +'+waNum:'Nombor WhatsApp belum ditetapkan.';
+}
+async function loadWa(){
+  var v=await DB.get(K.wa);
+  if(v){waNum=v;updateWaDisplay();}
+}
+async function saveWa(n){
+  waNum=n;updateWaDisplay();
+  await DB.set(K.wa,n);
+  toast('Nombor WhatsApp disimpan ✓');
+}
+function editWa(){
+  showModal({title:'Tukar Nombor WhatsApp',desc:'Masukkan nombor lengkap dengan kod negara tanpa "+" (cth: 60123456789).',placeholder:'60123456789',defaultValue:waNum,inputType:'tel'})
+  .then(function(v){
+    if(v===null)return;
+    var n=v.replace(/\D/g,'');
+    if(!n){toast('Nombor tidak sah');return;}
+    saveWa(n);
+  });
+}
+function sendWa(){
+  if(!waNum){toast('Admin belum tetapkan nombor WhatsApp');return;}
+  var fields=[
+    ['Nama Asal','f-1'],['Nama Baru','f-2'],['Agama / Kepercayaan Terdahulu','f-3'],
+    ['Bangsa','f-4'],['Warganegara','f-5'],['No. Kad Pengenalan / Pasport','f-6'],
+    ['Tarikh Lahir','f-7'],['Tempat Lahir','f-8'],['Status Perkahwinan','f-9'],
+    ['Alamat Surat Menyurat','f-10'],['Bahasa','f-11'],['Tahap Pendidikan','f-12'],
+    ['No. Telefon / Emel','f-13'],['Pekerjaan','f-14'],['Alamat Tempat Kerja','f-15']
+  ];
+  var msg='*Maklumat Pendaftaran Mualaf - HCF Johor*\n\n',hasVal=false;
+  fields.forEach(function(f){
+    var el=document.getElementById(f[1]);
+    var v=el?el.value.trim():'';
+    if(v)hasVal=true;
+    msg+=f[0]+': '+(v||'-')+'\n';
+  });
+  if(!hasVal){toast('Sila isi sekurang-kurangnya satu medan');return;}
+  window.open('https://wa.me/'+waNum+'?text='+encodeURIComponent(msg),'_blank');
+}
+
+// ── LOGO ──────────────────────────────────────────────────────────
+async function loadLogo(){
+  var v=await DB.get(K.logo);
+  var img=document.getElementById('logo-img');
+  if(v&&img)img.src=v;
+}
+function handleLogoUpload(file){
+  if(!file)return;
+  var r=new FileReader();
+  r.onload=async function(e){
+    var img=document.getElementById('logo-img');
+    if(img)img.src=e.target.result;
+    var ok=await DB.set(K.logo,e.target.result);
+    toast(ok?'Logo disimpan ✓':'Logo dikemaskini (saiz terlalu besar untuk disimpan kekal)');
+  };
+  r.readAsDataURL(file);
+}
+
+// ── ATTACHMENTS ───────────────────────────────────────────────────
+function renderBox(boxId,name,dataUrl){
+  var box=document.getElementById(boxId);
+  if(!box)return;
+  if(dataUrl&&dataUrl.startsWith('data:image/')){
+    box.innerHTML='<img src="'+dataUrl+'" class="max-h-56 w-auto object-contain rounded-lg border mx-auto" alt="Pratonton"><p class="text-[10px] text-hcf-mid font-semibold mt-2 text-center">✓ '+name+'</p>';
+  }else{
+    box.innerHTML='<div class="p-4 text-center"><span class="text-xs font-bold text-hcf-deep block">✓ Fail disimpan</span><span class="text-[10px] text-slate-500 block mt-1">'+name+'</span></div>';
+  }
+}
+async function loadFiles(){
+  var v=await DB.get(K.files);
+  if(!v)return;
+  try{
+    var m=JSON.parse(v);
+    Object.keys(m).forEach(function(k){if(m[k])renderBox('preview-'+k,m[k].name,m[k].data);});
+  }catch(e){}
+}
+window.previewFile=function(input,boxId){
+  var file=input.files[0];
+  if(!file)return;
+  var key=boxId.replace('preview-','');
+  var r=new FileReader();
+  r.onload=async function(e){
+    renderBox(boxId,file.name,e.target.result);
+    var map={};
+    try{var cur=await DB.get(K.files);if(cur)map=JSON.parse(cur);}catch(ex){}
+    map[key]={name:file.name,data:e.target.result};
+    var ok=await DB.set(K.files,JSON.stringify(map));
+    toast(ok?'Lampiran '+key+' disimpan ✓':'Lampiran dikemaskini (saiz mungkin besar)');
+  };
+  r.readAsDataURL(file);
+};
+
+// ── EXPORT ────────────────────────────────────────────────────────
+function exportFile(){
+  var clone=document.documentElement.cloneNode(true);
+  clone.classList.remove('admin-mode');
+  clone.querySelectorAll('[contenteditable]').forEach(function(el){el.removeAttribute('contenteditable');});
+  ['#admin-toolbar','#admin-hint','#modal-overlay'].forEach(function(s){var el=clone.querySelector(s);if(el)el.remove();});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob(['<!DOCTYPE html>\n'+clone.outerHTML],{type:'text/html'}));
+  a.download='panduan-pengislaman-mualaf-hcf-johor.html';
+  document.body.appendChild(a);a.click();a.remove();
+  toast('Fail dimuat turun ✓');
+}
+
+// ── RESET ─────────────────────────────────────────────────────────
+function resetContent(){
+  showModal({title:'Set Semula',desc:'Semua suntingan akan dihapuskan dan kembali ke kandungan asal. Teruskan?',hideInput:true})
+  .then(function(ok){
+    if(!ok)return;
+    con.innerHTML=tpl.innerHTML;
+    DB.del(K.html);
+    initUI();
+    if(isAdmin)setEditable(true);
+    toast('Kandungan disetel semula ✓');
+  });
+}
+
+// ── LIST HELPERS ──────────────────────────────────────────────────
+function cloneItem(ref){
+  var c=ref.cloneNode(true);
+  c.querySelectorAll('.edit-block').forEach(function(el){
+    el.textContent='Teks baharu';el.removeAttribute('data-key');
+    if(isAdmin)el.contentEditable='true';
+  });
+  var a=c.querySelector('.map-link');
+  if(a){a.href='#';a.setAttribute('data-url','');}
+  return c;
+}
+
+// ── EVENTS ────────────────────────────────────────────────────────
+document.addEventListener('click',function(e){
+  var tab=e.target.closest('[data-tab]');
+  if(tab){switchTab(tab.dataset.tab);return;}
+
+  var acc=e.target.closest('.accordion-header');
+  if(acc){acc.closest('.accordion-item').classList.toggle('open');return;}
+
+  var elBtn=e.target.closest('.edit-link-btn');
+  if(elBtn&&isAdmin){
+    var wrap=elBtn.closest('li')||elBtn.closest('div');
+    var link=wrap&&wrap.querySelector('.map-link');
+    if(link){
+      showModal({title:'Tukar Pautan Peta',placeholder:'https://maps.app.goo.gl/...',defaultValue:link.getAttribute('data-url')||''})
+      .then(function(u){
+        if(!u)return;
+        link.href=u.trim();link.setAttribute('data-url',u.trim());
+        toast('Pautan dikemaskini ✓');scheduleAutosave();
+      });
+    }
+    return;
+  }
+
+  var rmBtn=e.target.closest('.remove-item-btn');
+  if(rmBtn&&isAdmin){var li=rmBtn.closest('li');if(li){li.remove();scheduleAutosave();}return;}
+
+  var addBtn=e.target.closest('[data-add]');
+  if(addBtn&&isAdmin){
+    var list=document.getElementById(addBtn.dataset.add);
+    if(list&&list.children.length){list.appendChild(cloneItem(list.children[0]));scheduleAutosave();}
+    return;
+  }
+
+  if(e.target.closest('#admin-lock-btn')){
+    if(isAdmin){exitAdmin();return;}
+    showModal({title:'Log Masuk Admin',desc:'Masukkan kod admin untuk mula menyunting kandungan.',placeholder:'Kod admin',inputType:'password'})
+    .then(function(code){
+      if(code===null)return;
+      if(code===PASS)enterAdmin();else toast('Kod tidak betul');
+    });
+    return;
+  }
+
+  if(e.target.closest('#btn-save')){saveHTML(false);return;}
+  if(e.target.closest('#btn-export')){exportFile();return;}
+  if(e.target.closest('#btn-reset')){resetContent();return;}
+  if(e.target.closest('#btn-exit-admin')){exitAdmin();return;}
+  if(e.target.closest('#btn-edit-wa')){editWa();return;}
+  if(e.target.closest('#btn-send-wa')){sendWa();return;}
+});
+
+document.addEventListener('change',function(e){
+  if(e.target&&e.target.id==='logo-upload-input')handleLogoUpload(e.target.files[0]);
+});
+
+con.addEventListener('input',function(e){
+  if(isAdmin&&e.target.classList&&e.target.classList.contains('edit-block'))scheduleAutosave();
+});
+con.addEventListener('blur',function(e){
+  if(isAdmin&&e.target.classList&&e.target.classList.contains('edit-block'))scheduleAutosave();
+},true);
+
+// ── BOOT (single async sequence, no race conditions) ──────────────
+(async function boot(){
+  await loadHTML();          // 1. restore saved page content
+  initUI();                  // 2. reset nav to info tab
+  if(isAdmin)setEditable(true); // 3. re-apply editability if needed
+  await loadWa();            // 4. restore WA number
+  await loadLogo();          // 5. restore logo (outside appContent)
+  await loadFiles();         // 6. restore attachment previews
+})();
+
+})();
+</script>
+</body>
+</html>
